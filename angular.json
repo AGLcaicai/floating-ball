@@ -121,6 +121,46 @@
           }
         }
       }
+    },
+    "ngx-float-ball": {
+      "root": "projects/ngx-float-ball",
+      "sourceRoot": "projects/ngx-float-ball/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-float-ball/tsconfig.lib.json",
+            "project": "projects/ngx-float-ball/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ngx-float-ball/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-float-ball/src/test.ts",
+            "tsConfig": "projects/ngx-float-ball/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-float-ball/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-float-ball/tsconfig.lib.json",
+              "projects/ngx-float-ball/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "floating-ball"

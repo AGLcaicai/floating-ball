@@ -1,27 +1,36 @@
-# FloatingBall
+# ngx-float-ball
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.2.
+这是一个Angular的悬浮球控件。
 
-## Development server
+- 支持触摸滑动
+- 支持鼠标拖动
+- 支持点击信号
+- 支持设置鼠标点击延迟
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## 安装
 
-## Code scaffolding
+```
+npm install ngx-float-ball --save
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 使用
 
-## Build
+1. 在app.module.ts内导入：
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
+import { NgxFloatBallModule } from 'ngx-float-ball'
+```
 
-## Running unit tests
+2. 在html内使用
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```
+<ngx-float-ball></ngx-float-ball>
+```
 
-## Running end-to-end tests
+## 效果展示
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-4/97750938.jpg)
 
-## Further help
+## License
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- MIT
