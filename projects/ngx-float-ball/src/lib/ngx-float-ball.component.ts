@@ -5,8 +5,7 @@ import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/
   selector: 'ngx-float-ball',
   template: `
   <div id="floating-ball-container"
-       class="{{rippleClassName}}"
-       class="{{blinkingAnimationClassName}}"
+       class="{{rippleClassName}} {{blinkingAnimationClassName}}"
        (click)="clicked.emit();"
        [style.cursor]="currentCursorStyle"
        [style.width]="addUnit(outerCircleDiameter)"
@@ -50,10 +49,7 @@ export class NgxFloatBallComponent implements AfterViewInit {
   private timer: any;
   private cursorStyle = { default: 'default', moved: 'move' };
 
-  constructor() { }
-
-  ngAfterViewInit() {
-
+  constructor() {
     if (!this.hasRipple) {
       this.rippleClassName = '';
     }
@@ -61,6 +57,11 @@ export class NgxFloatBallComponent implements AfterViewInit {
     if (!this.isBlinked) {
       this.blinkingAnimationClassName = '';
     }
+
+   }
+
+  ngAfterViewInit() {
+
 
     const rootNode = document.getElementById('floating-ball-container');
     const viewWidth = window.innerWidth;
