@@ -5,6 +5,8 @@ import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/
   selector: 'ngx-float-ball',
   template: `
   <div id="floating-ball-container"
+       class="{{rippleClassName}}"
+       class="{{blinkingAnimationClassName}}"
        (click)="clicked.emit();"
        [style.cursor]="currentCursorStyle"
        [style.width]="addUnit(outerCircleDiameter)"
@@ -17,7 +19,7 @@ import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/
       </div>
 </div>
   `,
-  styleUrls: ['./ngx-float-ball.scss']
+  styleUrls: ['./ngx-float-ball.scss', './ripple.scss']
 })
 export class NgxFloatBallComponent implements AfterViewInit {
 
@@ -25,7 +27,9 @@ export class NgxFloatBallComponent implements AfterViewInit {
   @Output() public clicked = new EventEmitter();
   @Input() outerCircleDiameter = 60;    // 外圆直径
   @Input() innerCircleDiameter = 30;    // 内圆直径
-  @Input() pressedTime = 400;           // 鼠标按压时间
+  @Input() delayTime = 400;             // 鼠标移动延迟时间，即按压400ms后生效
+  @Input() isBlinked = true;            // 是否闪烁
+  @Input() hasRipple = true;            // 是否有点击波纹效果
 
   posX = 0;            // 悬浮球的x轴位置
   posY = 0;            // 悬浮球的y轴位置
@@ -41,13 +45,22 @@ export class NgxFloatBallComponent implements AfterViewInit {
   elementOffsetY = 0;  // 悬浮球容器的Y偏移量
 
   currentCursorStyle = 'default';
-
+  rippleClassName = 'ripple';
+  blinkingAnimationClassName = 'blinking';
   private timer: any;
   private cursorStyle = { default: 'default', moved: 'move' };
 
   constructor() { }
 
   ngAfterViewInit() {
+
+    if (!this.hasRipple) {
+      this.rippleClassName = '';
+    }
+
+    if (!this.isBlinked) {
+      this.blinkingAnimationClassName = '';
+    }
 
     const rootNode = document.getElementById('floating-ball-container');
     const viewWidth = window.innerWidth;
@@ -59,7 +72,7 @@ export class NgxFloatBallComponent implements AfterViewInit {
       this.timer = setInterval(() => {
         this.isPressed = true; // 确认鼠标按下
         this.openMovedCursor();
-      }, this.pressedTime);
+      }, this.delayTime);
       this.lastMousePos.x = event.clientX; // 记录鼠标当前的x坐标
       this.lastMousePos.y = event.clientY; // 记录鼠标当前的y坐标
       this.elementOffsetX = rootNode.offsetLeft; // 记录容器元素当时的左偏移量
@@ -131,7 +144,6 @@ export class NgxFloatBallComponent implements AfterViewInit {
         rootNode.style.top = this.posY + 'px';
       }
     });
-
     // <<<-------------------------------------------------------------------------------------------
   }
 

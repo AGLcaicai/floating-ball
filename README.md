@@ -4,8 +4,21 @@
 
 - 支持触摸滑动
 - 支持鼠标拖动
-- 支持点击信号
-- 支持设置鼠标点击延迟
+
+## 效果展示
+
+![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-4/97750938.jpg)
+
+## 参数说明
+
+Parameter | Type | Default Value | Description
+:---:|:---:|:---:|:---:
+clicked | signal | N/A | 鼠标点击事件
+outerCircleDiameter | number | 60 | 外圆的直径
+innerCircleDiameter | number | 30 | 内圆的直径
+delayTime | 400 | number | 鼠标移动延迟响应时间
+isBlinked | boolean | true | 是否闪烁悬浮球
+hasRipple | boolean | true | 是否有点击波纹效果
 
 ## 安装
 
@@ -27,9 +40,14 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 <ngx-float-ball></ngx-float-ball>
 ```
 
-## 效果展示
+## TODO
 
-![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-4/97750938.jpg)
+- [ ] 触摸延迟生效
+- [ ] 触摸到窗口外边界, 造成悬浮球不见防呆
+- [ ] 鼠标点击后动画消失，背景色更改至设定背景色
+- [ ] 增加背景色和前景色属性
+- [ ] 增加自定义嵌入元素
+
 
 ## License
 

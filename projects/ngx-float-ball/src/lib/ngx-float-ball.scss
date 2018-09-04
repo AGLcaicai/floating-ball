@@ -4,7 +4,7 @@ $container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
 
 // 悬浮球scss配置
 #floating-ball-container {
-    position: fixed;
+    position: absolute;
     z-index: 2000;
     bottom: 20px;
     right: 20px;
@@ -12,12 +12,8 @@ $container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
     width: 60px;
     border: none;
     border-radius: 50%;
-    // 动画效果, 一闪一闪的效果
-    animation: twinkle 1.5s alternate infinite;
-    -moz-animation:twinkle 1.5s alternate infinite; /* Firefox */
-    -webkit-animation:twinkle 1.5s alternate infinite; /* Safari and Chrome */
-    -o-animation:twinkle 1.5s alternate infinite; /* Opera */
-    // background-color: $ball-background-color;
+
+    background-color: $container-bg-color;
     opacity: 1;
 
     // 阴影加深 24dp
@@ -39,11 +35,22 @@ $container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
 }
 
 #floating-ball-container:hover {
-    animation-play-state: paused; // 所有动画停止
     // 阴影加深 24dp
     box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14),
     0  6px 30px 5px rgba(0, 0, 0, 0.12),
     0  8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.blinking {
+    // 动画效果, 一闪一闪的效果
+    animation: twinkle 1.5s alternate infinite;
+    -moz-animation:twinkle 1.5s alternate infinite; /* Firefox */
+    -webkit-animation:twinkle 1.5s alternate infinite; /* Safari and Chrome */
+    -o-animation:twinkle 1.5s alternate infinite; /* Opera */
+}
+
+.blinking:hover {
+    animation-play-state: paused; // 所有动画停止
 }
 
 @keyframes twinkle{
