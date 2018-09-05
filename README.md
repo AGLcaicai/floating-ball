@@ -60,6 +60,7 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 - [x] 触摸到窗口外边界, 造成悬浮球不见防呆
 - [ ] 鼠标点击后动画消失，背景色更改至设定背景色
 - [ ] 增加自定义嵌入元素
+- [ ] 增加弹力吸附
 
 ## License
 

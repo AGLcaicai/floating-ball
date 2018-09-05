@@ -55,6 +55,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   blinkingAnimationClassName = 'blinking';
   private viewWidth: number;
   private viewHeight: number;
+  private rootNode: HTMLElement;
   private timer: any;
   private cursorStyle = { default: 'default', moved: 'move' };
 
@@ -75,21 +76,21 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   ngAfterViewInit() {
 
 
-    const rootNode = document.getElementById('floating-ball-container');
+    this.rootNode = document.getElementById('floating-ball-container');
     this.viewWidth = window.innerWidth;
     this.viewHeight = window.innerHeight;
 
     // >>>-------------------------------------------------------------------------------------------
     // 鼠标移动
-    rootNode.addEventListener('mousedown', (event) => {
+    this.rootNode.addEventListener('mousedown', (event) => {
       this.timer = setInterval(() => {
         this.isPressed = true; // 确认鼠标按下
         this.openMoveCursor();
       }, this.delayTime);
       this.lastMousePos.x = event.clientX; // 记录鼠标当前的x坐标
       this.lastMousePos.y = event.clientY; // 记录鼠标当前的y坐标
-      this.elementOffsetX = rootNode.offsetLeft; // 记录容器元素当时的左偏移量
-      this.elementOffsetY = rootNode.offsetTop; // 记录容器元素的上偏移量
+      this.elementOffsetX = this.rootNode.offsetLeft; // 记录容器元素当时的左偏移量
+      this.elementOffsetY = this.rootNode.offsetTop; // 记录容器元素的上偏移量
       event.preventDefault();                   // 取消其他事件
     }, false);
 
@@ -101,8 +102,8 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         this.posX = this.elementOffsetX + this.mouseOffsetX; // 容器在x轴的偏移量加上鼠标在x轴移动的距离
         this.posY = this.elementOffsetY + this.mouseOffsetY; // 容器在y轴的偏移量加上鼠标在y轴移动的距离
         this.checkBorder();
-        rootNode.style.left = this.posX + 'px';
-        rootNode.style.top = this.posY + 'px';
+        this.rootNode.style.left = this.posX + 'px';
+        this.rootNode.style.top = this.posY + 'px';
       }
     }, false);
 
@@ -116,15 +117,15 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
 
     // >>>-------------------------------------------------------------------------------------------
     // 触摸移动
-    rootNode.addEventListener('touchmove', (event) => {
+    this.rootNode.addEventListener('touchmove', (event) => {
       event.preventDefault(); // 阻止其他事件
       if (event.targetTouches.length === 1) {
         const touch = event.targetTouches[0]; // 把元素放在手指所在的位置
         this.posX = touch.pageX; // 存储x坐标
         this.posY = touch.pageY; // 存储Y坐标
         this.checkBorder();
-        rootNode.style.left = this.posX + 'px';
-        rootNode.style.top = this.posY + 'px';
+        this.rootNode.style.left = this.posX + 'px';
+        this.rootNode.style.top = this.posY + 'px';
       }
     });
     // <<<-------------------------------------------------------------------------------------------
@@ -143,6 +144,11 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   onWindowResize(): void {
     this.viewHeight = window.innerHeight;
     this.viewWidth = window.innerWidth;
+
+    this.checkBorder();
+
+    this.rootNode.style.left = this.posX + 'px';
+    this.rootNode.style.top = this.posY + 'px';
   }
   /**
   * @method changeCursorStyle 动态修改鼠标指针的样式
