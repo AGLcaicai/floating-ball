@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, Input, OnInit } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -8,19 +8,22 @@ import { Component, AfterViewInit, EventEmitter, Output, Input } from '@angular/
        class="{{rippleClassName}} {{blinkingAnimationClassName}}"
        (click)="clicked.emit();"
        [style.cursor]="currentCursorStyle"
+       [style.background]="background"
        [style.width]="addUnit(outerCircleDiameter)"
        [style.height]="addUnit(outerCircleDiameter)">
       <div id="inner-circle"
         [style.width]="addUnit(innerCircleDiameter)"
         [style.height]="addUnit(innerCircleDiameter)"
+        [style.background]="foreground"
         [style.top]="addUnit(outerCircleDiameter / 2 - innerCircleDiameter / 2)"
         [style.left]="addUnit(outerCircleDiameter / 2 - innerCircleDiameter / 2)">
+        <img *ngIf="!(icon === '')" src="{{icon}}" [style.width]="addUnit(iconDiameter)" [style.height]="addUnit(iconDiameter)">
       </div>
 </div>
   `,
   styleUrls: ['./ngx-float-ball.scss', './ripple.scss']
 })
-export class NgxFloatBallComponent implements AfterViewInit {
+export class NgxFloatBallComponent implements AfterViewInit, OnInit {
 
   // 点击悬浮球信号
   @Output() public clicked = new EventEmitter();
@@ -29,6 +32,10 @@ export class NgxFloatBallComponent implements AfterViewInit {
   @Input() delayTime = 400;             // 鼠标移动延迟时间，即按压400ms后生效
   @Input() isBlinked = true;            // 是否闪烁
   @Input() hasRipple = true;            // 是否有点击波纹效果
+  @Input() foreground = '#ffffff';      // 前景色,默认为白色
+  @Input() background = '#F44336';      // 背景色，默认为红色
+  @Input() icon = '';                   // 图标路径
+  @Input() iconDiameter = 30;           // 图标的直径
 
   posX = 0;            // 悬浮球的x轴位置
   posY = 0;            // 悬浮球的y轴位置
@@ -50,6 +57,10 @@ export class NgxFloatBallComponent implements AfterViewInit {
   private cursorStyle = { default: 'default', moved: 'move' };
 
   constructor() {
+
+  }
+
+  ngOnInit() {
     if (!this.hasRipple) {
       this.rippleClassName = '';
     }
@@ -57,8 +68,7 @@ export class NgxFloatBallComponent implements AfterViewInit {
     if (!this.isBlinked) {
       this.blinkingAnimationClassName = '';
     }
-
-   }
+  }
 
   ngAfterViewInit() {
 

@@ -1,6 +1,5 @@
-$inner-circle-bg: white;       // 内圆的背景色
-$container-bg-color: #F44336;  // 悬浮球容器的背景色
-$container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
+$container-start-opacity: 0.5;  // 悬浮球容器的动画开始透明度
+$container-end-opacity: 1;      // 悬浮球容器的动画结束透明度
 
 // 悬浮球scss配置
 #floating-ball-container {
@@ -12,10 +11,11 @@ $container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
     width: 60px;
     border: none;
     border-radius: 50%;
-
-    background-color: $container-bg-color;
     opacity: 1;
-
+    will-change: left, top;          // 提醒浏览器优化参数，left和top是变化的属性
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
     // 阴影加深 24dp
     box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14),
     0 3px 14px 2px rgba(0, 0, 0, 0.12),
@@ -27,10 +27,9 @@ $container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
         height: 30px;
         top: 15px;
         left: 15px;
+        will-change: left, top;          // 提醒浏览器优化参数，left和top是变化的属性
         border-radius: 50%;
-        // cursor: move;
-        background-color: $inner-circle-bg;
-        // opacity: 1;
+        overflow: hidden;
     }
 }
 
@@ -54,22 +53,22 @@ $container-bg-start-color: #EF9A9A; // 悬浮球动画背景开始颜色
 }
 
 @keyframes twinkle{
-    from{background: $container-bg-start-color;}
-    to{background: $container-bg-color;}
+    from{opacity: $container-start-opacity;}
+    to{opacity: $container-end-opacity;}
 }
 
 @-moz-keyframes twinkle{ /* Firefox */
-    from{background: $container-bg-start-color;}
-    to{background: $container-bg-color;}
+    from{opacity: $container-start-opacity;}
+    to{opacity: $container-end-opacity;}
 }
 @-webkit-keyframes twinkle{ /* Safari and Chrome */
-    from{background: $container-bg-start-color;}
-    to{background: $container-bg-color;}
+    from{opacity: $container-start-opacity;}
+    to{opacity: $container-end-opacity;}
 }
 
 @-o-keyframes twinkle{ /* Opera */
-    from{background: $container-bg-start-color;}
-    to{background: $container-bg-color;}
+    from{opacity: $container-start-opacity;}
+    to{opacity: $container-end-opacity;}
 }
 
 
