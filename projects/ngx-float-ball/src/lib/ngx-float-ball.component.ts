@@ -111,7 +111,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
 
         // 下边界
         if (this.posY + this.outerCircleDiameter > viewHeight) {
-          this.posY = viewHeight - this.outerCircleDiameter;
+          this.posY = viewHeight - this.outerCircleDiameter ;
         }
 
         // 上边界
@@ -139,17 +139,21 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         const touch = event.targetTouches[0]; // 把元素放在手指所在的位置
         this.posX = touch.pageX; // 存储x坐标
         this.posY = touch.pageY; // 存储Y坐标
-        if ((touch.pageX + this.outerCircleDiameter) > viewWidth) {// 超越右边界
-          this.posX = viewWidth - this.outerCircleDiameter / 2;
+        // 超越右边界
+        if ((touch.pageX + this.outerCircleDiameter) > viewWidth) {
+          this.posX = viewWidth - this.outerCircleDiameter;
         }
-        if ((touch.pageY + this.outerCircleDiameter) > viewHeight) {// 超越下边界
+        // 超越左边界
+        if (touch.pageX < 0) {
+          this.posX = 0;
+        }
+        // 超越下边界
+        if ((touch.pageY + this.outerCircleDiameter) > viewHeight) {
           this.posY = viewHeight - this.outerCircleDiameter;
         }
-        if ((touch.pageX - this.outerCircleDiameter) < 0) {// 超越左边界
-          this.posX = this.outerCircleDiameter / 2;
-        }
-        if ((touch.pageY - this.outerCircleDiameter) < 0) {// 超越上边界
-          this.posY = this.outerCircleDiameter / 2;
+        // 超越上边界
+        if (touch.pageY < 0) {
+          this.posY = 0;
         }
         rootNode.style.left = this.posX + 'px';
         rootNode.style.top = this.posY + 'px';

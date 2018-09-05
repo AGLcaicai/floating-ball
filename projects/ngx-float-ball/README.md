@@ -1,11 +1,10 @@
 # ngx-float-ball
 
-这是一个Angular的悬浮球控件。[github](https://github.com/93Alliance/floating-ball)。
+这是一个Angular的悬浮球控件。
 
 - 支持触摸滑动
 - 支持鼠标拖动
 - 支持图标
-- 硬件加速
 
 ## 效果展示
 
@@ -54,14 +53,13 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 
 ## TODO
 
-- [x] 添加前景色，背景色
+- [x] 增加背景色和前景色属性
 - [x] 增加图标支持
+- [x] 优化渲染
 - [ ] 触摸延迟生效
 - [ ] 触摸到窗口外边界, 造成悬浮球不见防呆
 - [ ] 鼠标点击后动画消失，背景色更改至设定背景色
-- [ ] 增加背景色和前景色属性
 - [ ] 增加自定义嵌入元素
-
 
 ## License
 
