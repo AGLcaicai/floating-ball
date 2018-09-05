@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, EventEmitter, Output, Input, OnInit } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output, Input, OnInit, HostListener } from '@angular/core';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -53,6 +53,8 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   currentCursorStyle = 'default';
   rippleClassName = 'ripple';
   blinkingAnimationClassName = 'blinking';
+  private viewWidth: number;
+  private viewHeight: number;
   private timer: any;
   private cursorStyle = { default: 'default', moved: 'move' };
 
@@ -74,15 +76,15 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
 
 
     const rootNode = document.getElementById('floating-ball-container');
-    const viewWidth = window.innerWidth;
-    const viewHeight = window.innerHeight;
+    this.viewWidth = window.innerWidth;
+    this.viewHeight = window.innerHeight;
 
     // >>>-------------------------------------------------------------------------------------------
     // 鼠标移动
     rootNode.addEventListener('mousedown', (event) => {
       this.timer = setInterval(() => {
         this.isPressed = true; // 确认鼠标按下
-        this.openMovedCursor();
+        this.openMoveCursor();
       }, this.delayTime);
       this.lastMousePos.x = event.clientX; // 记录鼠标当前的x坐标
       this.lastMousePos.y = event.clientY; // 记录鼠标当前的y坐标
@@ -98,26 +100,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         this.mouseOffsetY = event.clientY - this.lastMousePos.y; // 记录在鼠标y轴移动的数据
         this.posX = this.elementOffsetX + this.mouseOffsetX; // 容器在x轴的偏移量加上鼠标在x轴移动的距离
         this.posY = this.elementOffsetY + this.mouseOffsetY; // 容器在y轴的偏移量加上鼠标在y轴移动的距离
-
-        // 右边界
-        if (this.posX + this.outerCircleDiameter > viewWidth) {
-          this.posX = viewWidth - this.outerCircleDiameter;
-        }
-
-        // 左边界
-        if (this.posX < 0) {
-          this.posX = 0;
-        }
-
-        // 下边界
-        if (this.posY + this.outerCircleDiameter > viewHeight) {
-          this.posY = viewHeight - this.outerCircleDiameter ;
-        }
-
-        // 上边界
-        if (this.posY < 0) {
-          this.posY = 0;
-        }
+        this.checkBorder();
         rootNode.style.left = this.posX + 'px';
         rootNode.style.top = this.posY + 'px';
       }
@@ -126,7 +109,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
     // 鼠标释放时候的函数
     document.addEventListener('mouseup', () => {
       this.isPressed = false;
-      this.closeMovedCursor();
+      this.closeMoveCursor();
       clearInterval(this.timer);  // 释放定时器
     }, false);
     // <<<-------------------------------------------------------------------------------------------
@@ -139,22 +122,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         const touch = event.targetTouches[0]; // 把元素放在手指所在的位置
         this.posX = touch.pageX; // 存储x坐标
         this.posY = touch.pageY; // 存储Y坐标
-        // 超越右边界
-        if ((touch.pageX + this.outerCircleDiameter) > viewWidth) {
-          this.posX = viewWidth - this.outerCircleDiameter;
-        }
-        // 超越左边界
-        if (touch.pageX < 0) {
-          this.posX = 0;
-        }
-        // 超越下边界
-        if ((touch.pageY + this.outerCircleDiameter) > viewHeight) {
-          this.posY = viewHeight - this.outerCircleDiameter;
-        }
-        // 超越上边界
-        if (touch.pageY < 0) {
-          this.posY = 0;
-        }
+        this.checkBorder();
         rootNode.style.left = this.posX + 'px';
         rootNode.style.top = this.posY + 'px';
       }
@@ -163,6 +131,20 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   }
 
   /**
+  * @method onWindowResize 监听窗口大小变化，修改悬浮球的可移动窗口大小
+  * @param grid {Ext.Grid.Panel} 需要合并的Grid
+  * @return void
+  * @author vincent 2018-09-05
+  * @version 0.0.1
+  * @example
+  * @log 1. vincent,2018-09-05,完成
+  */
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.viewHeight = window.innerHeight;
+    this.viewWidth = window.innerWidth;
+  }
+  /**
   * @method changeCursorStyle 动态修改鼠标指针的样式
   * @return void
   * @author vincent 2018-09-02
@@ -170,24 +152,60 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   * @example
   * @log 1. vincent,2018-09-02,完成
   */
-  openMovedCursor(): void {
+  openMoveCursor(): void {
     if (this.currentCursorStyle === this.cursorStyle.moved) {
       return;
     }
-
     this.currentCursorStyle = this.cursorStyle.moved;
   }
 
-  closeMovedCursor(): void {
-
+  /**
+  * @method closeMoveCursor 关闭鼠标移动样式
+  * @return void
+  * @author vincent 2018-09-05
+  * @version 0.0.1
+  * @example
+  * @log 1. vincent,2018-09-05,完成
+  */
+  closeMoveCursor(): void {
     if (this.currentCursorStyle === this.cursorStyle.default) {
       return;
     }
     this.currentCursorStyle = this.cursorStyle.default;
   }
 
+  /**
+  * @method addUnit 将数字添加单位px
+  * @param value {number} 需要合并列的Index(序号)数组；从0开始计数，序号也包含。
+  * @return string 返回带单位的字符串 例如：95px
+  * @author vincent 2018-09-05
+  * @version 0.0.1
+  * @example
+  * @log 1. vincent,2018-09-05,完成
+  */
   addUnit(value: number): string {
     return value + 'px';
   }
 
+  checkBorder(): void {
+    // 右边界
+    if (this.posX + this.outerCircleDiameter > this.viewWidth) {
+      this.posX = this.viewWidth - this.outerCircleDiameter;
+    }
+
+    // 左边界
+    if (this.posX < 0) {
+      this.posX = 0;
+    }
+
+    // 下边界
+    if (this.posY + this.outerCircleDiameter > this.viewHeight) {
+      this.posY = this.viewHeight - this.outerCircleDiameter;
+    }
+
+    // 上边界
+    if (this.posY < 0) {
+      this.posY = 0;
+    }
+  }
 }
