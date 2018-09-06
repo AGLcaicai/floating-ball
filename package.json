@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --base-href '/floating-ball/'",
     "test": "ng test",
     "lint": "ng lint",
+    "ghpage": "pc ngh --dir=dist/floating-ball",
     "e2e": "ng e2e"
   },
   "private": true,

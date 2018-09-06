@@ -82,7 +82,17 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
 
     // >>>-------------------------------------------------------------------------------------------
     // 鼠标移动
+    this.rootNode.oncontextmenu = (event) => {  // 取消元素的浏览器右键
+      if (document.all) {
+        window.event.returnValue = false; // for IE
+      } else {
+        event.preventDefault();
+      }
+    };
     this.rootNode.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) {
+        return;
+      }
       this.timer = setInterval(() => {
         this.isPressed = true; // 确认鼠标按下
         this.openMoveCursor();
