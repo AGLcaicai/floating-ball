@@ -50,6 +50,8 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   elementOffsetX = 0;  // 悬浮球容器的X偏移量
   elementOffsetY = 0;  // 悬浮球容器的Y偏移量
 
+  touchOffset = 10;    // 触摸移动误差10px
+
   currentCursorStyle = 'default';
   rippleClassName = 'ripple';
   blinkingAnimationClassName = 'blinking';
@@ -131,8 +133,8 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
       event.preventDefault(); // 阻止其他事件
       if (event.targetTouches.length === 1) {
         const touch = event.targetTouches[0]; // 把元素放在手指所在的位置
-        this.posX = touch.pageX; // 存储x坐标
-        this.posY = touch.pageY; // 存储Y坐标
+        this.posX = touch.pageX - this.touchOffset; // 存储x坐标
+        this.posY = touch.pageY - this.touchOffset; // 存储Y坐标
         this.checkBorder();
         this.rootNode.style.left = this.posX + 'px';
         this.rootNode.style.top = this.posY + 'px';
