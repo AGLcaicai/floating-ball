@@ -36,21 +36,21 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   @Input() background = '#F44336';      // 背景色，默认为红色
   @Input() icon = '';                   // 图标路径
   @Input() iconDiameter = 30;           // 图标的直径
+  @Input() initPos = [200, 200];        // 悬浮球的初始化位置
+  @Input() touchOffset = 15;            // 触摸移动误差15px
 
   posX = 0;            // 悬浮球的x轴位置
   posY = 0;            // 悬浮球的y轴位置
 
-  isPressed = false;   // 鼠标是否按下的标记
-  lastMousePos = {     // 记录鼠标按下时的坐标
+  private isPressed = false;   // 鼠标是否按下的标记
+  private lastMousePos = {     // 记录鼠标按下时的坐标
     x: 0,
     y: 0
   };
-  mouseOffsetX = 0;    // 鼠标X偏移量
-  mouseOffsetY = 0;    // 鼠标X偏移量
-  elementOffsetX = 0;  // 悬浮球容器的X偏移量
-  elementOffsetY = 0;  // 悬浮球容器的Y偏移量
-
-  touchOffset = 10;    // 触摸移动误差10px
+  private mouseOffsetX = 0;    // 鼠标X偏移量
+  private mouseOffsetY = 0;    // 鼠标X偏移量
+  private elementOffsetX = 0;  // 悬浮球容器的X偏移量
+  private elementOffsetY = 0;  // 悬浮球容器的Y偏移量
 
   currentCursorStyle = 'default';
   rippleClassName = 'ripple';
@@ -73,6 +73,9 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
     if (!this.isBlinked) {
       this.blinkingAnimationClassName = '';
     }
+
+    this.posX = this.initPos[0];
+    this.posY = this.initPos[1];
   }
 
   ngAfterViewInit() {
@@ -81,6 +84,8 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
     this.rootNode = document.getElementById('floating-ball-container');
     this.viewWidth = window.innerWidth;
     this.viewHeight = window.innerHeight;
+
+    this.setPosition();  // 设置初始位置
 
     // >>>-------------------------------------------------------------------------------------------
     // 鼠标移动
@@ -114,8 +119,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         this.posX = this.elementOffsetX + this.mouseOffsetX; // 容器在x轴的偏移量加上鼠标在x轴移动的距离
         this.posY = this.elementOffsetY + this.mouseOffsetY; // 容器在y轴的偏移量加上鼠标在y轴移动的距离
         this.checkBorder();
-        this.rootNode.style.left = this.posX + 'px';
-        this.rootNode.style.top = this.posY + 'px';
+        this.setPosition();
       }
     }, false);
 
@@ -136,8 +140,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         this.posX = touch.pageX - this.touchOffset; // 存储x坐标
         this.posY = touch.pageY - this.touchOffset; // 存储Y坐标
         this.checkBorder();
-        this.rootNode.style.left = this.posX + 'px';
-        this.rootNode.style.top = this.posY + 'px';
+        this.setPosition();
       }
     });
     // <<<-------------------------------------------------------------------------------------------
@@ -159,8 +162,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
 
     this.checkBorder();
 
-    this.rootNode.style.left = this.posX + 'px';
-    this.rootNode.style.top = this.posY + 'px';
+    this.setPosition();
   }
   /**
   * @method changeCursorStyle 动态修改鼠标指针的样式
@@ -170,7 +172,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   * @example
   * @log 1. vincent,2018-09-02,完成
   */
-  openMoveCursor(): void {
+  private openMoveCursor(): void {
     if (this.currentCursorStyle === this.cursorStyle.moved) {
       return;
     }
@@ -185,7 +187,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   * @example
   * @log 1. vincent,2018-09-05,完成
   */
-  closeMoveCursor(): void {
+  private closeMoveCursor(): void {
     if (this.currentCursorStyle === this.cursorStyle.default) {
       return;
     }
@@ -205,7 +207,11 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
     return value + 'px';
   }
 
-  checkBorder(): void {
+  private setPosition() {
+    this.rootNode.style.left = this.addUnit(this.posX);
+    this.rootNode.style.top = this.addUnit(this.posY);
+  }
+  private checkBorder(): void {
     // 右边界
     if (this.posX + this.outerCircleDiameter > this.viewWidth) {
       this.posX = this.viewWidth - this.outerCircleDiameter;
