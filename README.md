@@ -54,6 +54,15 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 
 ![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-5/53800170.jpg)
 
+3. 弹力吸附功能
+
+```
+<ngx-float-ball [openInertia]="true">
+</ngx-float-ball>
+```
+
+![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-9/44556840.jpg)
+
 ## TODO
 
 - [x] 增加背景色和前景色属性

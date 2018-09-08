@@ -38,7 +38,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   @Input() iconDiameter = 30;           // 图标的直径
   @Input() initPos = [200, 200];        // 悬浮球的初始化位置
   @Input() touchOffset = 15;            // 触摸移动误差15px
-  @Input() openInertia = true;          // 开启弹性双边吸附功能
+  @Input() openInertia = false;          // 开启弹性双边吸附功能
 
   posX = 0;            // 悬浮球的x轴位置
   posY = 0;            // 悬浮球的y轴位置

@@ -26,6 +26,7 @@ icon | string | null | 图标路径
 iconDiameter | number | 30 | 图标的直径
 initPos | number[] | [200, 200] | 悬浮球的初始化位置
 touchOffset | number | 15 | 触摸移动误差15px
+openInertia | boolean | true | 开启弹性双边吸附功能
 
 
 ## 安装
@@ -53,6 +54,15 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 
 ![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-5/53800170.jpg)
 
+3. 弹力吸附功能
+
+```
+<ngx-float-ball [openInertia]="true">
+</ngx-float-ball>
+```
+
+![](http://fly-share-image.oss-cn-beijing.aliyuncs.com/18-9-9/44556840.jpg)
+
 ## TODO
 
 - [x] 增加背景色和前景色属性
@@ -62,7 +72,7 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 - [x] 触摸到窗口外边界, 造成悬浮球不见防呆
 - [ ] 鼠标点击后动画消失，背景色更改至设定背景色
 - [ ] 增加自定义嵌入元素
-- [ ] 增加弹力吸附
+- [x] 增加弹力吸附
 - [ ] 修复鼠标单击后快速移动到某一位置，达到延迟时间后，松开鼠标，悬浮球快速移动过去
 - [x] 修复悬浮球未移动浏览器F12后，位置更换到[0,0]的错误
 - [ ] 增加悬浮球scss样式重载
