@@ -38,6 +38,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   @Input() iconDiameter = 30;           // 图标的直径
   @Input() initPos = [200, 200];        // 悬浮球的初始化位置
   @Input() touchOffset = 15;            // 触摸移动误差15px
+  @Input() openInertia = true;          // 开启弹性双边吸附功能
 
   posX = 0;            // 悬浮球的x轴位置
   posY = 0;            // 悬浮球的y轴位置
@@ -51,6 +52,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
   private mouseOffsetY = 0;    // 鼠标X偏移量
   private elementOffsetX = 0;  // 悬浮球容器的X偏移量
   private elementOffsetY = 0;  // 悬浮球容器的Y偏移量
+  private destPos = 0;
 
   currentCursorStyle = 'default';
   rippleClassName = 'ripple';
@@ -120,6 +122,7 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         this.posY = this.elementOffsetY + this.mouseOffsetY; // 容器在y轴的偏移量加上鼠标在y轴移动的距离
         this.checkBorder();
         this.setPosition();
+
       }
     }, false);
 
@@ -128,6 +131,17 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
       this.isPressed = false;
       this.closeMoveCursor();
       clearInterval(this.timer);  // 释放定时器
+      if (this.openInertia) {
+        if (this.posX + this.outerCircleDiameter / 2 <= this.viewWidth / 2) {
+          this.destPos = 0;
+        } else {
+          this.destPos = this.viewWidth - this.outerCircleDiameter;
+        }
+        this.easeout(this.posX, this.destPos, 3, (value) => {
+          this.posX = value;
+          this.setPosition();
+        });
+      }
     }, false);
     // <<<-------------------------------------------------------------------------------------------
 
@@ -139,8 +153,23 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
         const touch = event.targetTouches[0]; // 把元素放在手指所在的位置
         this.posX = touch.pageX - this.touchOffset; // 存储x坐标
         this.posY = touch.pageY - this.touchOffset; // 存储Y坐标
+
         this.checkBorder();
         this.setPosition();
+      }
+    });
+
+    this.rootNode.addEventListener('touchend', (event) => {
+      if (this.openInertia) {
+        if (this.posX + this.outerCircleDiameter / 2 <= this.viewWidth / 2) {
+          this.destPos = 0;
+        } else {
+          this.destPos = this.viewWidth - this.outerCircleDiameter;
+        }
+        this.easeout(this.posX, this.destPos, 3, (value) => {
+          this.posX = value;
+          this.setPosition();
+        });
       }
     });
     // <<<-------------------------------------------------------------------------------------------
@@ -231,5 +260,38 @@ export class NgxFloatBallComponent implements AfterViewInit, OnInit {
     if (this.posY < 0) {
       this.posY = 0;
     }
+  }
+
+  /**
+  * @method easeout 缓动函数
+  * @param srcPos {number} 起始位置
+  * @param destPos {number} 目标位置
+  * @param rate {number} 缓动速率,数值越小，衰减越快
+  * @param callback {(value: number, isEnding?: boolean) => any}; callback是变化的位置回调，支持两个参数，
+  *                 value和isEnding，表示当前的位置值（数值）以及是否动画结束了（布尔值）
+  * @return void
+  * @author vincent 2018-09-09
+  * @version 0.0.1
+  * @example
+  * @log 1. vincent,2018-09-09,完成
+  */
+  easeout(srcPos: number, destPos: number, rate: number, callback: (value: number, isEnding?: boolean) => any): void {
+    if (srcPos === destPos) {
+      return;
+    }
+    destPos = destPos || 0;
+    rate = rate || 2;
+
+    const step = () => {
+      srcPos = srcPos + (destPos - srcPos) / rate;
+
+      if (Math.abs(srcPos - destPos) < 1) {
+        callback(destPos, true);
+        return;
+      }
+      callback(srcPos, false);
+      requestAnimationFrame(step);
+    };
+    step();
   }
 }

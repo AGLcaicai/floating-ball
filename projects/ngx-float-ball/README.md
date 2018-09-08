@@ -24,6 +24,8 @@ foreground | string | #ffffff | 前景色,默认为白色
 background | string | #F44336 | 前景色,默认为红色
 icon | string | null | 图标路径
 iconDiameter | number | 30 | 图标的直径
+initPos | number[] | [200, 200] | 悬浮球的初始化位置
+touchOffset | number | 15 | 触摸移动误差15px
 
 
 ## 安装
@@ -56,11 +58,14 @@ import { NgxFloatBallModule } from 'ngx-float-ball'
 - [x] 增加背景色和前景色属性
 - [x] 增加图标支持
 - [x] 优化渲染
-- [ ] 触摸延迟生效
+- [ ] 增加tap,点击,双击,长按
 - [x] 触摸到窗口外边界, 造成悬浮球不见防呆
 - [ ] 鼠标点击后动画消失，背景色更改至设定背景色
 - [ ] 增加自定义嵌入元素
 - [ ] 增加弹力吸附
+- [ ] 修复鼠标单击后快速移动到某一位置，达到延迟时间后，松开鼠标，悬浮球快速移动过去
+- [x] 修复悬浮球未移动浏览器F12后，位置更换到[0,0]的错误
+- [ ] 增加悬浮球scss样式重载
 
 ## License
 
